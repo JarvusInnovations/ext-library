@@ -12,6 +12,7 @@ Ext.define('Jarvus.ext.override.app.ControllerRouting', (function() {
 
         onBeforeLaunch: function() {
             var me = this,
+                History = Ext.util.History,
                 controllers, c = 0, cLength,
                 controller, controllerRoutes, url, route, paramsInMatchString, conditions, matcherRegex, p, pLength, param, config;
 
@@ -57,9 +58,9 @@ Ext.define('Jarvus.ext.override.app.ControllerRouting', (function() {
             routesLength = routes.length;
 
             // initialize history and attach to events
-            Ext.util.History.on('change', 'onHistoryChange', me);
-            Ext.util.History.init(function() {
-                var token = Ext.util.History.getToken();
+            History.on('change', 'onHistoryChange', me);
+            History.init(function() {
+                var token = History.getToken();
 
                 if (token) {
                     me.onHistoryChange(token);
