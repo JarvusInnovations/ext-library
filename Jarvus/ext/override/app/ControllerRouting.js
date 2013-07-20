@@ -12,9 +12,14 @@ Ext.define('Jarvus.ext.override.app.ControllerRouting', (function() {
 
         onBeforeLaunch: function() {
             var me = this,
+                suspendLayoutUntilFirstRoute = me.suspendLayoutUntilFirstRoute,
                 History = Ext.util.History,
                 controllers, c = 0, cLength,
                 controller, controllerRoutes, url, route, paramsInMatchString, conditions, matcherRegex, p, pLength, param, config;
+                
+            if (suspendLayoutUntilFirstRoute) {
+                Ext.suspendLayouts();
+            }
 
             me.callParent(arguments);
 
@@ -64,6 +69,10 @@ Ext.define('Jarvus.ext.override.app.ControllerRouting', (function() {
 
                 if (token) {
                     me.onHistoryChange(token);
+                }
+                
+                if (suspendLayoutUntilFirstRoute) {
+                    Ext.resumeLayouts(true);
                 }
             });
         },
