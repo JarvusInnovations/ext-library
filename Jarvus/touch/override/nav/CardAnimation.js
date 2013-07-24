@@ -1,20 +1,13 @@
-/**
- * Animation enhancements for NavigationView:
- *  - Each card in a navigationview may implement a navAnimation config or getNavAnimation function to override the layout's default animation
- *  - The new events 'enterscreen' and 'leavescreen' are fired on each card after their transition animation is complete
- *  - The new event 'transitioncomplete' is fired on the navigation view after a transition animation is complete
- */
-Ext.define('Jarvus.touch.override.nav.CardAnimation', {
+/*jslint browser: true, undef: true, white: false, laxbreak: true *//*global Ext*/
+Ext.define('Jarvus.override.nav.CardAnimation', {
     override: 'Ext.navigation.View',
     uses: [
         'Ext.fx.layout.Card'
     ],
     
-    transitionEventDelay: 10, // TODO: should this be a config?
+    transitionEventDelay: 10,
 
-    /**
-     * Optionally return a special animation for the given navigation
-     */
+    /* Optionally return a special animation for the given navigation */
     getNavAnimation: function(incomingItem, outgoingItem, reverse) {
         var animItem = reverse ? outgoingItem : incomingItem,
             animation = null;
@@ -74,7 +67,7 @@ Ext.define('Jarvus.touch.override.nav.CardAnimation', {
         }
     },
 
-    ,doResetActiveItem: function(innerIndex) {
+    doResetActiveItem: function(innerIndex) {
         var me = this,
             innerItems = me.getInnerItems(),
             outgoingItem, incomingItem,
