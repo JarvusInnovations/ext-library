@@ -1,5 +1,5 @@
 /*jslint browser: true, undef: true, white: false, laxbreak: true *//*global Ext*/
-Ext.define('Jarvus.override.nav.CardAnimation', {
+Ext.define('Jarvus.touch.override.nav.CardAnimation', {
     override: 'Ext.navigation.View',
     uses: [
         'Ext.fx.layout.Card'
