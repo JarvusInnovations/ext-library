@@ -27,13 +27,11 @@ Ext.define('Jarvus.touch.override.nav.CardAnimation', {
         var me = this,
             outgoingItem = me.getActiveItem(),
             animation, isDefaultAnimation = false,
-            onAnimationEnd;
-            
-        onAnimationEnd = function() {
-            outgoingItem.fireEvent('leavescreen', outgoingItem, incomingItem, me);
-            incomingItem.fireEvent('enterscreen', incomingItem, outgoingItem, me);
-            me.fireEvent('transitioncomplete', me, incomingItem, outgoingItem);
-        };
+            onAnimationEnd = function() {
+                outgoingItem.fireEvent('leavescreen', outgoingItem, incomingItem, me);
+                incomingItem.fireEvent('enterscreen', incomingItem, outgoingItem, me);
+                me.fireEvent('transitioncomplete', me, incomingItem, outgoingItem);
+            };
         
         me.doItemLayoutAdd(incomingItem, index);
         
