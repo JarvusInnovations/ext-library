@@ -9,10 +9,9 @@ Ext.define('Jarvus.util.ExternalBrowser', {
      */
     open: function(url) {
         if (!this.isHomescreenApp()) {
-            window.open(url);
+            window.open(url, '_blank', 'location=no,enableViewportScale=yes');
             return;
         }
-        
         var anchorNode = document.createElement('a'),
             fakeEvent = document.createEvent("HTMLEvents");
             
@@ -41,15 +40,19 @@ Ext.define('Jarvus.util.ExternalBrowser', {
     
     /**
      * Sets up a handler for external links on environments where special handling is needed to
-     * launch links into external browser windows
+     * launch links into external browser windows (specifically, using ChildBrowser on Cordova/PhoneGap)
      */
     setupLinkHandler: function() {
         if (!this.isHomescreenApp()) {
-            Ext.getBody().on('click', function(ev, t) {
-                t = ev.getTarget('a');
-                window.open(t.href, t.target, 'location=no');
-                ev.stopEvent();
-            }, this, {delegate: 'a[target=_blank],a[target=_system]'});
+            // must attach DOM event listener directly as Sencha Touch 2.2 removes support for listening to real DOM events
+            document.body.addEventListener('click', function(e) {
+                var target = Ext.fly(e.target).findParent('a[target=_blank],a[target=_system]');
+                
+                if (target) {
+                    e.preventDefault();
+                    window.open(target.href, target.target, 'location=no');
+                }
+            }, false);
         }
     },
     
