@@ -1,5 +1,5 @@
-Ext.define('Jarvus.util.Format.fuzzyTime', {
-  override: 'Ext.util.Format',
+Ext.define('Jarvus.util.format.FuzzyTime', {
+    override: 'Ext.util.Format',
     
     fuzzyTime: function(date) {
         var msPerMinute = 60 * 1000,
