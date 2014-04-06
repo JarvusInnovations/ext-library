@@ -12,6 +12,7 @@ Ext.define('Jarvus.util.ExternalBrowser', {
             window.open(url, '_blank', 'location=no,enableViewportScale=yes');
             return;
         }
+        
         var anchorNode = document.createElement('a'),
             fakeEvent = document.createEvent("HTMLEvents");
             
