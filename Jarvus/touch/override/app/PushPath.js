@@ -17,8 +17,11 @@ Ext.define('Jarvus.touch.override.app.PushPath', {
      * @param {String/String[]/Ext.data.Model} url The url path to push
      */
     pushPath: function(url) {
-        var app = this.getApplication();
+        var app = this.getApplication(),
+            encodedUrl = app.encodePath(url);
 
-        app.getHistory().add(Ext.create('Ext.app.Action', {url: app.encodePath(url)}), true);
+        app.getHistory().add(Ext.create('Ext.app.Action', {url: encodedUrl}), true);
+
+		app.fireEvent('pathpush', encodedUrl);
     }
 });
