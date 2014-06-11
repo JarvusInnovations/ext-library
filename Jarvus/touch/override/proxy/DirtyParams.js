@@ -1,20 +1,21 @@
+/*jslint browser: true, undef: true, white: false, laxbreak: true *//*global Ext*/
 Ext.define('Jarvus.touch.override.proxy.DirtyParams', {
-    override: 'Ext.data.proxy.Server',
-
-    extraParamsDirty: false,
-
-    setExtraParam: function(name, value) {
-        var extraParams = this.getExtraParams();
-
-        if (extraParams[name] !== value) {
-            this.markParamsDirty();
-            extraParams[name] = value;
-        }
-    },
-
-    patchExtraParams: function(newParams) {
-        var extraParams = this.getExtraParams(),
-            dirty = false;
+    override: 'Ext.data.proxy.Server'
+	
+	,extraParamsDirty: false
+	
+	,setExtraParam: function(name, value) {
+		var extraParams = this.getExtraParams();
+		
+		if (extraParams[name] !== value) {
+			this.markParamsDirty();
+			extraParams[name] = value;
+		}
+	}
+    
+    ,patchExtraParams: function(newParams) {
+        var extraParams = this.getExtraParams()
+            ,dirty = false;
 
         Ext.Object.each(newParams, function(name, value) {
             if (extraParams[name] !== value) {
@@ -31,18 +32,18 @@ Ext.define('Jarvus.touch.override.proxy.DirtyParams', {
         if (dirty) {
             this.markParamsDirty();
         }
-    },
-
-    markParamsDirty: function() {
-        this.extraParamsDirty = true;
-    },
-
-    isExtraParamsDirty: function() {
-        return this.extraParamsDirty;
-    },
-
-    buildRequest: function() {
-        this.extraParamsDirty = false;
-        return this.callParent(arguments);
     }
+	
+	,markParamsDirty: function() {
+		this.extraParamsDirty = true;
+	}
+	
+	,isExtraParamsDirty: function() {
+		return this.extraParamsDirty;
+	}
+
+	,buildRequest: function() {
+		this.extraParamsDirty = false;
+		return this.callParent(arguments);
+	}
 });

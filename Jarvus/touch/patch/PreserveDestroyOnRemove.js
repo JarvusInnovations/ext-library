@@ -18,7 +18,7 @@ Ext.define('Jarvus.touch.patch.PreserveDestroyOnRemove', {
             item.fireAction('renderedchange', [this, item, false], 'onItemRemove', layout, { args: [item, index, destroying] });
         }
         else {
-            layout.onItemRemove(item, index, destroying);
+            layout.onItemRemove(item, index);
         }
     }
 });
