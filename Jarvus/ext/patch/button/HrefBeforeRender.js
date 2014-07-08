@@ -1,8 +1,7 @@
 /**
  * Fixes issue where JS error is generated if setHref/setParams is called before button is rendered
  * 
- * See http://www.sencha.com/forum/showthread.php?288294-tagfield-config-filterPickList-implementation-partly-broken&p=1053510
- * Test case https://fiddle.sencha.com/#fiddle/7ga
+ * See http://www.sencha.com/forum/showthread.php?288306-button-setHref-setParams-doesn-t-check-if-rendered-before-touching-DOM&p=1053557
  */
 Ext.define('Jarvus.ext.patch.button.HrefBeforeRender', {
     override: 'Ext.button.Button',
