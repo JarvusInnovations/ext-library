@@ -1,12 +1,11 @@
 /*jslint browser: true, undef: true *//*global Ext*/
 Ext.define('Emergence.ext.proxy.Records', {
-    extend: 'Ext.data.proxy.Ajax',
+    extend: 'Jarvus.ext.proxy.API',
     alias: 'proxy.records',
-    
-    /**
-     * @cfg The API wrapper singleton that will process requests
-     * @required
-     */
+    requires: [
+        'Emergence.util.API'
+    ],
+
     apiWrapper: 'Emergence.util.API',
 
     /**
@@ -21,6 +20,7 @@ Ext.define('Emergence.ext.proxy.Records', {
     limitParam: 'limit',
     sortParam: 'sort',
     simpleSortMode: true,
+    groupParam: false,
     reader: {
         type: 'json',
         root: 'data',
@@ -31,44 +31,6 @@ Ext.define('Emergence.ext.proxy.Records', {
         root: 'data',
         writeAllFields: false,
         allowSingle: false
-    },
-
-    doRequest: function() {
-        var me = this,
-            apiWrapper = me.apiWrapper,
-            doApiRequest = me.doApiRequest,
-            requestArguments = arguments;
-
-        // ensure apiWrapper is required and converted to instance before request is built
-        if (typeof apiWrapper == 'string') {
-            Ext.require(apiWrapper, function() {
-                me.apiWrapper = Ext.ClassManager.get(apiWrapper);
-                doApiRequest.apply(me, requestArguments);
-            });
-        } else {
-            doApiRequest.apply(me, requestArguments);
-        }
-    },
-    
-    doApiRequest: function(operation, callback, scope) {
-        var me = this,
-            writer = me.getWriter(),
-            request = me.buildRequest(operation);
-            
-        if (operation.allowWrite()) {
-            request = writer.write(request);
-        }
-        
-        me.getAPIWrapper().request(Ext.apply(request, {
-            autoDecode: false,
-            success: function(response) {
-                me.processResponse(true, operation, request, response, callback, scope);
-            }
-        }));
-    },
-
-    getAPIWrapper: function() {
-        return this.apiWrapper;
     },
 
     buildRequest: function(operation) {
@@ -83,14 +45,19 @@ Ext.define('Emergence.ext.proxy.Records', {
             });
 
         request.method = me.getMethod(request);
-        request.url =me.buildUrl(request);
+        request.url = me.buildUrl(request);
+        
+        // compatibility with Jarvus.ext.override.proxy.DirtyParams since we're entirely replacing the buildRequest method it overrides
+        if (Ext.isFunction(me.clearParamsDirty)) {
+            me.clearParamsDirty();
+        }
 
         return request;
     },
 
     buildUrl: function(request) {
         var me = this,
-            baseUrl = me.getUrl(request) + '/json';
+            baseUrl = me.getUrl(request) ;
 
         switch(request.action) {
             case 'read':
@@ -112,11 +79,25 @@ Ext.define('Emergence.ext.proxy.Records', {
 
     getParams: function(operation) {
         var me = this,
+            include = me.include,
+            relatedTable = me.relatedTable,
             idParam = me.idParam,
             params = me.callParent(arguments);
 
         if (operation.id && idParam != 'ID') {
             params[idParam] = operation.id;
+        }
+        
+        if (include) {
+            params.include = Ext.isArray(include) ? include.join(',') : include;
+        }
+        
+        if (relatedTable) {
+            params.relatedTable = Ext.isArray(relatedTable) ? relatedTable.join(',') : relatedTable;
+        }
+        
+        if (me.summary) {
+            params.summary = 'true';
         }
         
         return params;
