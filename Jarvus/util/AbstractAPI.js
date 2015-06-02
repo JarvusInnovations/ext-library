@@ -102,6 +102,8 @@ Ext.define('Jarvus.util.AbstractAPI', {
                     Ext.callback(options.failure, options.scope, [response]);
                 } else if (options.exception) {
                     Ext.callback(options.exception, options.scope, [response]);
+                } else if (response.aborted === true) {
+                    Ext.callback(options.abort, options.scope, [response]);
                 } else {
                     Ext.Msg.confirm('An error occurred' ,'There was an error trying to reach the server. Do you want to try again?', function(btn) {
                         if (btn === 'yes') {
